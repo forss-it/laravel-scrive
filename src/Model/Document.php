@@ -51,7 +51,7 @@ class Document extends Model {
         foreach($data->documents as $rawDoc){
             $documents->push(new Document($rawDoc->id, $rawDoc));
         }
-        return $this;
+        return $documents;
     }
 
     public function start() {
