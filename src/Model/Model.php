@@ -31,7 +31,7 @@ class Model {
         return 'https://scrive.com/api/v2/';
     }
 
-    protected function callApi($method, $endPoint, $data = null) {
+    protected function callApi($method, $endPoint, $data = null, $file = false) {
         $client = new Client();
         $requestData = [
             'headers' => $this->getHeaders(),
@@ -39,8 +39,11 @@ class Model {
         if($data) {
             $requestData['multipart'] = $data;
         }
-        $response = $client->request($method, $this->getApiUrl().$endPoint, $requestData);
 
+        $response = $client->request($method, $this->getApiUrl().$endPoint, $requestData);
+        if($file) {
+            return $response->getBody();
+        }
         return json_decode($response->getBody()->getContents());
     }
 }

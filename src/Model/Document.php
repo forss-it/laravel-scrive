@@ -52,6 +52,24 @@ class Document extends Model {
             $documents->push(new Document($rawDoc->id, $rawDoc));
         }
         return $documents;
+
+    }
+
+    public function delete() {
+        if(!$this->id) {
+            throw new \Exception('Invalid id '.$this->id);
+        }
+        $this->data = $this->callApi('POST', 'documents/'.$this->id.'/trash');
+        $this->data = $this->callApi('POST', 'documents/'.$this->id.'/delete');
+        return $this;
+
+    }
+
+    public function file($id = 'main', $name = null) {
+        if(!$this->id) {
+            throw new \Exception('Invalid id '.$this->id);
+        }
+        return $this->callApi('GET', 'documents/'.$this->id.'/files/'.$id.'/'.$name, null, true);
     }
 
     public function start() {

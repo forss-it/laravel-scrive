@@ -14,4 +14,5 @@ class ScriveTest extends \Dialect\Scrive\TestCase
         $this->assertEquals($document->id, 100);
     }
 
+
 }
