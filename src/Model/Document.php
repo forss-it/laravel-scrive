@@ -52,6 +52,7 @@ class Document extends Model {
             $documents->push(new Document($rawDoc->id, $rawDoc));
         }
         return $documents;
+
     }
 
     public function delete() {
@@ -61,6 +62,7 @@ class Document extends Model {
         $this->data = $this->callApi('POST', 'documents/'.$this->id.'/trash');
         $this->data = $this->callApi('POST', 'documents/'.$this->id.'/delete');
         return $this;
+
     }
 
     public function file($id = 'main', $name = null) {
