@@ -40,8 +40,20 @@ class DocumentTest extends \Dialect\Scrive\TestCase
         $document = Scrive::document()->create(__DIR__.'/testfiles/pdf-sample.pdf', true);
         $document->start();
         $this->assertEquals($document->data->status, 'pending');
-
-
     }
+
+    /** @test */
+    public function it_can_delete_document(){
+        $document = Scrive::document()->create(__DIR__.'/testfiles/pdf-sample.pdf', true);
+        $document->delete();
+        $this->assertTrue($document->data->is_deleted);
+    }
+
+    /** @test */
+    public function it_can_download_document_file(){
+        $document = Scrive::document()->create(__DIR__.'/testfiles/pdf-sample.pdf', true);
+        $this->assertEquals(get_class($document->file()),'GuzzleHttp\Psr7\Stream');
+    }
+
 
 }
