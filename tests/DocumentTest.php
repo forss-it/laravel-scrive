@@ -55,5 +55,13 @@ class DocumentTest extends \Dialect\Scrive\TestCase
         $this->assertEquals(get_class($document->file()),'GuzzleHttp\Psr7\Stream');
     }
 
+    /** @test */
+    public function it_can_add_parties_when_creating_an_document(){
+        $document = Scrive::document()->create(__DIR__.'/testfiles/pdf-sample.pdf', true);
+        $document->addParty('test testsson', 'test@example.se', 'test company');
+        $update = Scrive::document($document->id)->get();
+        $this->assertCount(2, $update->data->parties);
+    }
+
 
 }
