@@ -34,6 +34,43 @@ class Document extends Model {
       return $this;
     }
 
+    public function addParty($name, $email, $company = ""){
+        if(!$this->data) {
+            $this->get();
+        }
+
+        $data[] = [
+            'name' => 'document_id',
+            'contents' => $this->id
+        ];
+
+        $party =  [
+            "is_signatory" => true ,
+            "fields" => [
+                ["type" => "name", "order" => 1, "value" => $name],
+                ["type" => "email", "value" => $email],
+                ["type" => "company", "value" => $company]
+            ],
+            "sign_order" => 1,
+            "delivery_method" => "email",
+            "authentication_method_to_view" => "standard",
+            "authentication_method_to_sign" => "standard",
+            "confirmation_delivery_method" => "email"
+        ];
+
+        $parties = $this->data->parties;
+        $parties[0]->is_signatory = false;
+        $parties[] = $party;
+
+        $data[] = [
+            'name' => 'document',
+            'contents' => json_encode(['parties' => $parties])
+        ];
+
+
+        $this->data = $this->callApi('POST','documents/'.$this->id.'/update', $data);
+    }
+    
     public function get() {
         $this->data = $this->callApi('GET', 'documents/'.$this->id.'/get');
         return $this;
