@@ -6,17 +6,32 @@ use GuzzleHttp\Client;
 class Model {
     public $id;
     public $data;
+    private $clientIdentifier;
+    private $tokenIdentifier;
+    private $clientSecret;
+    private $tokenSecret;
     public function __construct($id = null, $data = null)
     {
         $this->id = $id;
         $this->data = $data;
+        $this->setCredentials(config('scrive.secret_client_identifier'), config('scrive.secret_token_identifier'), config('scrive.secret_client_secret'), config('scrive.secret_token_secret'));
+
+    }
+
+    public function setCredentials($clientIdentifier, $tokenIdentifier, $clientSecret, $tokenSecret) {
+        $this->clientIdentifier = $clientIdentifier;
+        $this->tokenIdentifier = $tokenIdentifier;
+        $this->clientSecret = $clientSecret;
+        $this->tokenSecret = $tokenSecret;
+
+        return $this;
     }
     
     protected function getHeaders() {
         $authString = 'oauth_signature_method="PLAINTEXT"';
-        $authString .= ', oauth_consumer_key="'.config('scrive.secret_client_identifier').'"';
-        $authString .= ', oauth_token="'.config('scrive.secret_token_identifier').'"';
-        $authString .= ', oauth_signature="'.config('scrive.secret_client_secret').'&'.config('scrive.secret_token_secret').'"';
+        $authString .= ', oauth_consumer_key="'. $this->clientIdentifier.'"';
+        $authString .= ', oauth_token="'.$this->tokenIdentifier.'"';
+        $authString .= ', oauth_signature="'.$this->clientSecret.'&'.$this->tokenSecret.'"';
 
         return [
             'Authorization' => $authString
