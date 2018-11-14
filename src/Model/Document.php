@@ -117,4 +117,13 @@ class Document extends Model {
         return $this;
     }
 
+    public function remind() {
+        if(!$this->id) {
+            throw new \Exception('Invalid id '.$this->id);
+        }
+        $this->data = $this->callApi('POST', 'documents/'.$this->id.'/remind');
+        return $this;
+
+    }
+
 }
