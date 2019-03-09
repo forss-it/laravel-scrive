@@ -63,5 +63,14 @@ class DocumentTest extends \Dialect\Scrive\TestCase
         $this->assertCount(2, $update->data->parties);
     }
 
+    /** @test */
+    public function it_can_cancel_document(){
+        $document = Scrive::document()->create(__DIR__.'/testfiles/pdf-sample.pdf', true);
+        $document->start();
+        $document->cancel();
+        $this->assertEquals('canceled', $document->data->status);
+        
+    }
+
 
 }
